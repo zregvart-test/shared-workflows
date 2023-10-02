@@ -1,0 +1,17 @@
+name: 'Set auto merge'
+'on':
+  workflow_call:
+    secrets:
+    access-token:
+      required: true
+
+jobs:
+  set-auto-merge:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.review.state == 'APPROVED' && github.event.review.pull_request.user.login == 'dependabot[bot]' }}
+    steps:
+      env:
+        GITHUB_TOKEN: ${{ secrets.access-token }}
+      runs-on: ubuntu-latest
+      steps:
+        - run: gh pr merge ${{ github.event.review.pull_request.issue_url }} --auto
