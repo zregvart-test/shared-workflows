@@ -11,7 +11,7 @@ jobs:
           set -x
           FULL_NAME='${{ github.event.repository.full_name }}'
           ORG="${FULL_NAME%/*}"
-          REPO="${FULL_NAME##/*}"
+          REPO="${FULL_NAME#*/}"
           if [ "$(gh api graphql -f query="{repository(owner: \"${ORG}\", name: \"${REPO}\") { collaborators { nodes { login } } } }" --jq '.data.repository.collaborators.nodes.[].login | select (. == \"${{ github.event.sender.login }}\")')" == "${{ github.event.sender.login }}"]; then
             gh pr merge ${{ github.event.pull_request.number }} --merge --auto --delete-branch
           fi
