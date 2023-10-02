@@ -8,7 +8,10 @@ jobs:
     if: ${{ github.event.review.state == 'APPROVED' && github.event.pull_request.user.login == 'zregvart' }} #dependabot[bot]
     steps:
       - run: |
-          set -x
+          set -o errexit
+          set -o nounset
+          set -o pipefail
+
           FULL_NAME='${{ github.event.repository.full_name }}'
           ORG="${FULL_NAME%/*}"
           REPO="${FULL_NAME#*/}"
