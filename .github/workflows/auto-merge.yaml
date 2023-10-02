@@ -10,8 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     #if: ${{ github.event.review.state == 'APPROVED' && github.event.review.pull_request.user.login == 'zregvart' }} #dependabot[bot]
     steps:
-      - run: gh pr merge ${{ github.event.review.pull_request.issue_url }} --auto
+      - run: gh pr merge ${{ github.event.review.pull_request.url }} --auto
         env:
           GH_REPO: ${{ github.event.repository.full_name }}
-          MEH: ${{ github.event.review.pull_request.user.login }}
+          MEH: |
+            ${{ github.event.review.pull_request.user }}
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
