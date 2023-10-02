@@ -12,7 +12,8 @@ jobs:
     steps:
       - run: gh pr merge ${{ github.event.review.pull_request.issue_url }} --auto
         env:
-          GH_REPO: '${{ github.event.repository }}'
+          GH_REPO: |
+            ${{ github.event.repository }}
           MEH: '${{ github.event.review.state }}'
           MEH2: '${{ github.event.state }}'
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
