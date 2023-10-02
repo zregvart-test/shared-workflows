@@ -1,9 +1,9 @@
 name: 'Set auto merge'
 'on':
   workflow_call:
-    secrets:
-      access-token:
-        required: true
+    # secrets:
+    #   access-token:
+    #     required: true
 
 jobs:
   set-auto-merge:
