@@ -8,8 +8,12 @@ jobs:
     if: ${{ github.event.review.state == 'APPROVED' && github.event.pull_request.user.login == 'zregvart' }} #dependabot[bot]
     steps:
       - run: |
-          gh pr merge ${{ github.event.pull_request.number }} --merge --auto --delete-branch
-          echo '${{ toJSON(github.event) }}' | jq .
+          FULL_NAME='${{ github.event.repository.full_name }}'
+          ORG="${FULL_NAME%/*}"
+          REPO="${FULL_NAME#/*}"
+          if [ "$(gh api graphql -f query="{repository(owner: "${ORG}", name: "${REPO}") { collaborators { nodes { login } } } }" --jq '.data.repository.collaborators.nodes.[].login | select (. == "${{ sender.login }}")')" == "${{ sender.login }}"]; then
+            gh pr merge ${{ github.event.pull_request.number }} --merge --auto --delete-branch
+          fi
         env:
           GH_REPO: ${{ github.event.repository.full_name }}
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
